@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Test - CinePrompter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .status {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+        .info {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .next-steps {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 CinePrompter Server</h1>
+        <div class="status">
+            ✅ Server is running successfully!
+        </div>
+        <div class="info">
+            <p><strong>What you see here means:</strong></p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>Your web server is working</li>
+                <li>File access is working</li>
+                <li>Network connection is established</li>
+                <li>You're ready to use CinePrompter!</li>
+            </ul>
+        </div>
+        
+        <div class="next-steps">
+            <h3>🚀 Next Steps:</h3>
+            <p>Click the button below to open the CinePrompter teleprompter:</p>
+            <a href="teleprompter.html" class="btn">Open CinePrompter</a>
+        </div>
+        
+        <div class="info" style="margin-top: 20px; font-size: 0.9em;">
+            <p><strong>Server Information:</strong></p>
+            <p>Time: <span id="currentTime"></span></p>
+            <p>User Agent: <span id="userAgent" style="font-size: 0.8em;"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Display current time
+        document.getElementById('currentTime').textContent = new Date().toLocaleString();
+        
+        // Display user agent
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        
+        // Add some interactivity
+        document.querySelector('.container').addEventListener('click', function(e) {
+            if (e.target.tagName !== 'A') {
+                this.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

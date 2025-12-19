@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinePrompter - iPhone Teleprompter</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CinePrompter">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: rgba(28, 28, 30, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #0A84FF, #64D2FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #EBEBF5;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #8E8E93;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .feature h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #0A84FF;
+        }
+        
+        .feature p {
+            font-size: 0.9em;
+            color: #8E8E93;
+            line-height: 1.4;
+        }
+        
+        .cta-section {
+            margin-top: 40px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #0A84FF;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #0A84FF;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(10, 132, 255, 0.3);
+        }
+        
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #0A84FF;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .instructions ol {
+            color: #EBEBF5;
+            line-height: 1.6;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .device-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(10, 132, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(10, 132, 255, 0.3);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎬</div>
+        <h1>CinePrompter</h1>
+        <p class="subtitle">Professional iPhone Teleprompter for Content Creators</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Smooth Scrolling</h3>
+                <p>60fps text scrolling with adjustable speed (0.1x - 5.0x)</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>iPhone Optimized</h3>
+                <p>Designed specifically for iPhone with touch controls</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔄</div>
+                <h3>Mirror Mode</h3>
+                <p>Compatible with teleprompter hardware and reflection setups</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎛️</div>
+                <h3>Professional Controls</h3>
+                <p>Font size, speed, and reading zone customization</p>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <a href="teleprompter.html" class="cta-button">Open Teleprompter</a>
+            <a href="test.html" class="cta-button secondary-button">Test Server</a>
+        </div>
+        
+        <div class="instructions">
+            <h3>📱 Quick Setup for iPhone</h3>
+            <ol>
+                <li><strong>Start the server:</strong> Run <code>python server.py</code> on your computer</li>
+                <li><strong>Find your IP:</strong> Note the IP address shown (e.g., 192.168.1.100)</li>
+                <li><strong>Open Safari:</strong> Go to <code>http://YOUR_IP:8000</code> on your iPhone</li>
+                <li><strong>Start teleprompting:</strong> Tap "Open Teleprompter" and load your script</li>
+            </ol>
+        </div>
+        
+        <div class="device-info">
+            <strong>📲 Current Device:</strong> <span id="deviceInfo">Detecting...</span><br>
+            <strong>🌐 Connection:</strong> <span id="connectionInfo">Checking...</span>
+        </div>
+    </div>
+
+    <script>
+        // Device detection
+        const deviceInfo = document.getElementById('deviceInfo');
+        const connectionInfo = document.getElementById('connectionInfo');
+        
+        // Detect device type
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            if (isIOS) {
+                deviceInfo.textContent = 'iPhone/iPad (Safari)';
+                deviceInfo.style.color = '#0A84FF';
+            } else {
+                deviceInfo.textContent = 'Android Device';
+                deviceInfo.style.color = '#0A84FF';
+            }
+        } else {
+            deviceInfo.textContent = 'Desktop Computer';
+            deviceInfo.style.color = '#FF9500';
+        }
+        
+        // Check connection type
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            const connectionType = connection.effectiveType || 'Unknown';
+            connectionInfo.textContent = `Connection: ${connectionType}`;
+            
+            if (connectionType === '4g' || connectionType === '5g') {
+                connectionInfo.style.color = '#00D700';
+            } else if (connectionType === '3g') {
+                connectionInfo.style.color = '#FFA500';
+            } else {
+                connectionInfo.style.color = '#FF3B30';
+            }
+        } else {
+            connectionInfo.textContent = 'Connection info not available';
+            connectionInfo.style.color = '#8E8E93';
+        }
+        
+        // Add some interactivity
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Add loading state
+                const originalText = this.textContent;
+                this.textContent = 'Loading...';
+                this.style.opacity = '0.7';
+                
+                // Reset after a short delay
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.opacity = '1';
+                }, 1000);
+            });
+        });
+        
+        // Auto-redirect to teleprompter if on iPhone and server is accessible
+        if (isIOS && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            setTimeout(() => {
+                if (confirm('Detected iPhone. Would you like to open the teleprompter directly?')) {
+                    window.location.href = 'teleprompter.html';
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test - CinePrompter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .test-text {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 40px 0;
+            color: #fff;
+        }
+        .speed-display {
+            background: rgba(28, 28, 30, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            background: #0A84FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+        }
+        .btn:disabled {
+            background: #636366;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .improvement {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .feature-list {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .feature-list li {
+            margin: 8px 0;
+            color: #EBEBF5;
+        }
+        .highlight {
+            color: #0A84FF;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚀 CinePrompter Speed Test</h1>
+        
+        <div class="improvement">
+            <h3>✅ Fixed Issues:</h3>
+            <ul class="feature-list">
+                <li><strong>Speed Range:</strong> Now <span class="highlight">10-300 pixels/second</span> (instead of 0.1-5.0)</li>
+                <li><strong>Default Speed:</strong> Increased to <span class="highlight">80px/s</span> for immediate teleprompting</li>
+                <li><strong>Text Movement:</strong> Improved scrolling with better text flow</li>
+                <li><strong>Camera Overlay:</strong> New overlay mode for recording over camera apps</li>
+            </ul>
+        </div>
+
+        <div class="test-text" id="testText">
+            This is a speed test message. 
+            You should see this text moving much faster now! 
+            Perfect for teleprompting during video recording.
+        </div>
+
+        <div class="speed-display">
+            Current Speed: <span id="currentSpeed">80</span> px/s
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="startTest()">Start Test</button>
+            <button class="btn" onclick="stopTest()">Stop Test</button>
+            <button class="btn" onclick="resetTest()">Reset</button>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="teleprompter.html" class="btn">Go to Full Teleprompter</a>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 0.9em; color: #8E8E93;">
+            <p><strong>How to test:</strong></p>
+            <p>1. Click "Start Test" to see the speed improvement</p>
+            <p>2. Try the full teleprompter for script editing</p>
+            <p>3. Use "Overlay" mode for camera recording</p>
+        </div>
+    </div>
+
+    <script>
+        let isRunning = false;
+        let position = 0;
+        let speed = 80;
+        let animationFrame = null;
+        let lastTime = 0;
+
+        const testText = document.getElementById('testText');
+        const currentSpeedDisplay = document.getElementById('currentSpeed');
+
+        function startTest() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            lastTime = performance.now();
+            animate();
+        }
+
+        function stopTest() {
+            isRunning = false;
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        }
+
+        function resetTest() {
+            stopTest();
+            position = 0;
+            testText.style.transform = 'translateY(0px)';
+        }
+
+        function animate() {
+            if (!isRunning) return;
+
+            const currentTime = performance.now();
+            const deltaTime = (currentTime - lastTime) / 1000;
+            lastTime = currentTime;
+
+            position += speed * deltaTime;
+            testText.style.transform = `translateY(-${position}px)`;
+
+            // Reset when we move past the screen
+            if (position > window.innerHeight + 200) {
+                position = 0;
+                testText.style.transform = 'translateY(0px)';
+            }
+
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        // Show speed info
+        currentSpeedDisplay.textContent = speed;
+
+        // Auto-start for demo
+        setTimeout(() => {
+            startTest();
+        }, 1000);
+    </script>
+</body>
+</html>

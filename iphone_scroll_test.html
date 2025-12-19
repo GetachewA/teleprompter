@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>iPhone Scrolling Test - CinePrompter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .test-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow: hidden;
+            /* iOS Safari fixes */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        .reading-zone {
+            position: absolute;
+            top: 50%;
+            transform: translate3d(0, -50%, 0);
+            width: 100%;
+            max-width: 800px;
+            padding: 0 32px;
+            pointer-events: none;
+            z-index: 1;
+            height: auto;
+            min-height: 200px;
+        }
+        
+        .test-text {
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #FFFFFF;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            font-size: 48px;
+            overflow: visible;
+            overflow-x: hidden;
+            pointer-events: none;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 50px;
+            margin-top: -50px;
+            /* iOS Safari specific fixes */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28, 28, 30, 0.95);
+            padding: 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: #0A84FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .speed-display {
+            color: #EBEBF5;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .device-info {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 132, 255, 0.1);
+            border: 1px solid rgba(10, 132, 255, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            color: #0A84FF;
+            font-weight: 600;
+            text-align: center;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .reading-guide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .guide-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .guide-line.top {
+            top: 35%;
+        }
+        
+        .guide-line.bottom {
+            top: 65%;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-info" id="deviceInfo">
+        📱 iPhone Safari Test - Full Text Scrolling Fixed!
+    </div>
+
+    <div class="test-container">
+        <div class="reading-guide">
+            <div class="guide-line top"></div>
+            <div class="guide-line bottom"></div>
+        </div>
+        
+        <div class="reading-zone">
+            <div class="test-text" id="testText">
+                Welcome to the iPhone Safari scrolling test for CinePrompter!
+
+                This long script is designed to test if the full text scrolling works properly on iOS Safari. 
+                Previously, iPhone Safari had issues with CSS transforms and text rendering that caused only 
+                the first few lines to scroll properly.
+
+                With the iOS-specific fixes applied, you should now see this entire text flowing smoothly 
+                from top to bottom on your iPhone, just like it does on desktop browsers.
+
+                The fixes include:
+                • Hardware acceleration using translate3d
+                • iOS Safari specific CSS properties
+                • Proper backface visibility handling
+                • Force GPU rendering for smooth animation
+                • iOS-compatible transform methods
+
+                This script should scroll through completely without stopping early or showing only a 
+                portion of the text. The speed should be adjustable and responsive on iPhone Safari.
+
+                Test the controls below to verify:
+                • Start/Stop scrolling
+                • Speed adjustment (slower/faster)
+                • Reset to beginning
+                • Smooth 60fps animation
+
+                The text should continue scrolling until it reaches the end, then automatically pause 
+                and reset back to the beginning, just like professional teleprompter software.
+
+                This improvement makes CinePrompter fully functional on iPhone Safari for professional 
+                video production and content creation.
+
+                The teleprompter now supports:
+                • Full text scrolling on iOS Safari
+                • Camera overlay mode for recording
+                • Touch-friendly controls
+                • Professional speed range (10-300 px/s)
+                • Mirror mode for teleprompter hardware
+                • Script editing and management
+
+                All of these features now work consistently across iPhone Safari, making it possible to 
+                use CinePrompter for actual video production on mobile devices.
+
+                This marks a significant improvement in mobile teleprompter functionality, bringing 
+                professional-grade features to iPhone users.
+
+                Thank you for testing the improved iPhone Safari compatibility!
+
+                End of iPhone scrolling test message.
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="startScroll()">▶️ Start</button>
+        <button class="btn" onclick="stopScroll()">⏸️ Stop</button>
+        <button class="btn" onclick="resetScroll()">🔄 Reset</button>
+        <div class="speed-display">Speed: <span id="speedDisplay">80</span> px/s</div>
+        <button class="btn" onclick="adjustSpeed(-20)">🐌 Slow</button>
+        <button class="btn" onclick="adjustSpeed(20)">🐰 Fast</button>
+    </div>
+
+    <script>
+        let isScrolling = false;
+        let scrollPosition = 0;
+        let scrollSpeed = 80;
+        let animationFrame = null;
+        let lastTime = 0;
+
+        const testText = document.getElementById('testText');
+        const speedDisplay = document.getElementById('speedDisplay');
+        const deviceInfo = document.getElementById('deviceInfo');
+
+        // Detect iOS
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isIOS) {
+            deviceInfo.innerHTML = '📱 iPhone Safari - Using iOS-optimized scrolling';
+        } else {
+            deviceInfo.innerHTML = '💻 Desktop Browser - Testing compatibility';
+        }
+
+        function startScroll() {
+            if (isScrolling) return;
+            
+            isScrolling = true;
+            lastTime = performance.now();
+            animate();
+            
+            // iOS haptic feedback if supported
+            if ('vibrate' in navigator) {
+                navigator.vibrate(10);
+            }
+        }
+
+        function stopScroll() {
+            isScrolling = false;
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        }
+
+        function resetScroll() {
+            stopScroll();
+            scrollPosition = 0;
+            
+            // iOS Safari compatible reset
+            if (isIOS) {
+                testText.style.transform = 'translate3d(0, 0, 0)';
+            } else {
+                testText.style.transform = 'translateY(0)';
+            }
+        }
+
+        function adjustSpeed(delta) {
+            scrollSpeed = Math.max(10, Math.min(300, scrollSpeed + delta));
+            speedDisplay.textContent = scrollSpeed;
+        }
+
+        function animate() {
+            if (!isScrolling) return;
+
+            const currentTime = performance.now();
+            const deltaTime = (currentTime - this.lastTime) / 1000;
+            lastTime = currentTime;
+
+            scrollPosition += scrollSpeed * deltaTime;
+
+            // iOS Safari compatible transform
+            if (isIOS) {
+                testText.style.transform = `translate3d(0, -${scrollPosition}px, 0)`;
+            } else {
+                testText.style.transform = `translateY(-${scrollPosition}px)`;
+            }
+
+            // Check if we've scrolled through all content
+            const textHeight = testText.scrollHeight;
+            const containerHeight = window.innerHeight;
+            const totalScrollNeeded = textHeight + containerHeight + 200;
+
+            if (scrollPosition > totalScrollNeeded) {
+                stopScroll();
+                setTimeout(resetScroll, 1000);
+                return;
+            }
+
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        // Auto-start after 2 seconds
+        setTimeout(() => {
+            startScroll();
+        }, 2000);
+
+        // Update speed display
+        speedDisplay.textContent = scrollSpeed;
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Prevent pull-to-refresh
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>

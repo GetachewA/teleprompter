@@ -1,0 +1,945 @@
+/* ========================================
+   CinePrompter - Professional Teleprompter
+   Mobile-First iOS-Optimized Styles
+   ======================================== */
+
+/* CSS Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #000000;
+    color: #FFFFFF;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+/* ========================================
+   Main Prompter Canvas
+   ======================================== */
+
+.prompter-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.prompter-canvas.mirrored {
+    transform: scaleX(-1);
+}
+
+.reading-zone {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    max-width: 800px;
+    padding: 0 32px;
+    pointer-events: none;
+    z-index: 1;
+    /* Ensure reading zone doesn't clip the scrolling text */
+    height: auto;
+    min-height: 200px;
+}
+
+.prompt-text {
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #FFFFFF;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-size: 48px;
+    /* Removed max-height to allow full text scrolling */
+    /* max-height: 120px; */
+    overflow: visible; /* Allow all text to be visible during scrolling */
+    overflow-x: hidden;
+    pointer-events: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Add padding to prevent text from being too close to edges */
+    padding-bottom: 50px;
+    /* Start text from top for natural teleprompting flow */
+    margin-top: -50px;
+    /* iOS Safari fixes */
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    /* iPhone position-based scrolling support */
+    position: relative; /* Default for desktop */
+    top: auto; /* Default for desktop */
+    left: auto; /* Default for desktop */
+    width: auto; /* Default for desktop */
+}
+
+.prompt-text::-webkit-scrollbar {
+    display: none;
+}
+
+.prompt-text::-moz-scrollbar {
+    display: none;
+}
+
+/* ========================================
+   Reading Zone Guide
+   ======================================== */
+
+.reading-guide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.guide-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: opacity 0.3s ease;
+}
+
+.guide-line.top {
+    top: 35%;
+}
+
+.guide-line.bottom {
+    top: 65%;
+}
+
+.guide-line.hidden {
+    opacity: 0;
+}
+
+/* ========================================
+   Top Action Bar
+   ======================================== */
+
+.action-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.action-bar.hidden {
+    opacity: 0;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #EBEBF5;
+}
+
+.action-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: rgba(28, 28, 30, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EBEBF5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(20px);
+}
+
+.action-btn:hover {
+    background: rgba(28, 28, 30, 1);
+    transform: scale(1.05);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+/* ========================================
+   Floating Control Deck
+   ======================================== */
+
+.control-deck {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 64px);
+    max-width: 400px;
+    background: rgba(28, 28, 30, 0.95);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 15;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.control-deck.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #EBEBF5;
+    min-width: 60px;
+}
+
+/* Speed Control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.speed-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EBEBF5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.speed-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.speed-btn:active {
+    transform: scale(0.9);
+}
+
+.speed-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0A84FF;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Font Size Control */
+.font-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.font-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EBEBF5;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.font-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.font-btn:active {
+    transform: scale(0.9);
+}
+
+.font-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0A84FF;
+    min-width: 50px;
+    text-align: center;
+}
+
+/* Mirror Toggle */
+.mirror-control {
+    display: flex;
+    align-items: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #0A84FF;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Play Button */
+.play-btn {
+    width: 64px;
+    height: 64px;
+    border: none;
+    background: #0A84FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(10, 132, 255, 0.3);
+    margin: 0 auto;
+}
+
+.play-btn:hover {
+    background: #0A84FF;
+    transform: scale(1.05);
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.play-icon.hidden,
+.pause-icon.hidden {
+    display: none;
+}
+
+/* ========================================
+   Modals
+   ======================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #1C1C1E;
+    border-radius: 16px;
+    width: 90vw;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #EBEBF5;
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EBEBF5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* Script Input */
+#scriptInput {
+    width: 100%;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+#scriptInput:focus {
+    border-color: #0A84FF;
+}
+
+#scriptInput::placeholder {
+    color: #636366;
+}
+
+.char-count {
+    text-align: right;
+    font-size: 14px;
+    color: #636366;
+    margin-top: 8px;
+}
+
+/* Settings */
+.setting-group {
+    margin-bottom: 24px;
+}
+
+.setting-group label {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: #EBEBF5;
+    margin-bottom: 8px;
+}
+
+.setting-group input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    -webkit-appearance: none;
+    margin-bottom: 8px;
+}
+
+.setting-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0A84FF;
+    cursor: pointer;
+}
+
+.setting-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0A84FF;
+    cursor: pointer;
+    border: none;
+}
+
+.setting-value {
+    font-size: 14px;
+    color: #0A84FF;
+    font-weight: 600;
+}
+
+.checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background: #0A84FF;
+    border-color: #0A84FF;
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.btn-primary {
+    background: #0A84FF;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0A84FF;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #EBEBF5;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   Loading Overlay
+   ======================================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid #0A84FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+.loading-text {
+    color: #EBEBF5;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Landscape Mode (iPhone)
+   ======================================== */
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .control-deck {
+        right: 32px;
+        left: auto;
+        bottom: 50%;
+        transform: translateY(50%);
+        width: 280px;
+    }
+    
+    .action-bar {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent);
+    }
+    
+    .reading-zone {
+        padding: 0 200px 0 32px;
+        max-width: 600px;
+    }
+    
+    .control-group {
+        margin-bottom: 12px;
+    }
+    
+    .control-deck {
+        padding: 16px;
+    }
+}
+
+/* ========================================
+   iPhone SE and Small Screens
+   ======================================== */
+
+@media screen and (max-width: 375px) {
+    .control-deck {
+        width: calc(100vw - 32: 16pxpx);
+        bottom;
+        padding: 16px;
+    }
+    
+    .reading-zone {
+        padding: 0 16px;
+    }
+    
+    .prompt-text {
+        font-size: 36px;
+    }
+    
+    .action-bar {
+        padding: 0 12px;
+    }
+    
+    .modal-content {
+        width: 95vw;
+    }
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-primary {
+    color: #0A84FF;
+}
+
+.text-secondary {
+    color: #EBEBF5;
+}
+
+/* ========================================
+   Haptic Feedback (iOS)
+   ======================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    .action-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .speed-btn:active,
+    .font-btn:active,
+    .play-btn:active {
+        transform: scale(0.9);
+    }
+}
+
+/* ========================================
+   Prevent Text Selection
+   ======================================== */
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ========================================
+   Custom Scrollbar (for text areas)
+   ======================================== */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   Overlay Instructions Modal
+   ======================================== */
+
+.overlay-instructions {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.instructions-content {
+    background: rgba(28, 28, 30, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    margin: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: left;
+}
+
+.instructions-content h3 {
+    color: #0A84FF;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.instructions-content p {
+    color: #EBEBF5;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.instructions-content ol {
+    color: #EBEBF5;
+    margin: 15px 0;
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+.instructions-content li {
+    margin-bottom: 8px;
+}
+
+.instructions-content .btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #0A84FF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.instructions-content .btn:hover {
+    background: #0A84FF;
+    transform: translateY(-1px);
+}
+
+/* Overlay Mode Styles */
+body.overlay-mode {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    background: transparent !important;
+}
+
+.overlay-mode .action-bar {
+    display: none !important;
+}
+
+.overlay-mode .control-deck {
+    transform: scale(0.8) !important;
+    bottom: 20px !important;
+    left: 50% !important;
+}
+
+/* ========================================
+   iOS Safari Specific Fixes
+   ======================================== */
+
+/* Force hardware acceleration on iOS */
+@supports (-webkit-touch-callout: none) {
+    .prompter-canvas {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    
+    .prompt-text {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+    
+    .reading-zone {
+        -webkit-transform: translate3d(0, -50%, 0);
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+/* iOS Safari scrolling fixes */
+@media screen and (max-width: 768px) {
+    .prompt-text {
+        /* Ensure text is fully rendered on iOS */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* Force hardware acceleration */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        /* Prevent text selection and tap highlights */
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        /* Fix iOS Safari overflow issues */
+        overflow: visible !important;
+    }
+    
+    .prompter-canvas {
+        /* Force hardware acceleration on mobile */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    
+    /* Prevent iOS Safari bounce scrolling */
+    body {
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+    }
+}

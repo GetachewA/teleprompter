@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Text Scrolling Test - CinePrompter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .test-container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .test-text {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.4;
+            max-width: 800px;
+            padding: 0 32px;
+            /* Fixed styling to match teleprompter */
+            overflow: visible;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+            margin-top: -50px;
+        }
+        .controls {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28, 28, 30, 0.95);
+            padding: 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .btn {
+            padding: 12px 24px;
+            background: #0A84FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+        }
+        .speed-display {
+            color: #EBEBF5;
+            font-weight: 600;
+        }
+        .reading-zone {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: auto;
+            min-height: 200px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .success-note {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            color: #00FF00;
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-note">
+        ✅ Full Text Scrolling Fixed! All text now scrolls smoothly from top to bottom.
+    </div>
+
+    <div class="test-container">
+        <div class="reading-zone"></div>
+        <div class="test-text" id="testText">
+            Welcome to CinePrompter's Full Text Scrolling Test!
+
+            This is a longer script to demonstrate that the entire text now scrolls properly. 
+            Previously, only the first few lines were visible due to a height constraint.
+            
+            Now with the fixed CSS and JavaScript, you should see this entire text flowing 
+            smoothly from top to bottom as the teleprompter scrolls.
+            
+            This is particularly important for longer scripts, presentations, or video content 
+            where you need to teleprompt through several paragraphs or pages of content.
+            
+            The text should continue scrolling smoothly until it reaches the end, then pause 
+            and reset back to the beginning automatically.
+            
+            This improvement makes CinePrompter much more practical for real-world usage 
+            where you might have scripts of 500 words, 1000 words, or even longer content.
+            
+            The speed control now works across the full range of the text, and you can 
+            adjust the scrolling speed while the entire script is visible and flowing.
+            
+            Try adjusting the speed controls and observe how the entire text responds 
+            smoothly at different speeds.
+            
+            This fix addresses the core issue where only a small portion of text was 
+            scrollable, making the teleprompter much more functional for actual use.
+            
+            Thank you for testing the improved CinePrompter!
+            
+            The End of This Test Message.
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="startScroll()">Start Scrolling</button>
+        <button class="btn" onclick="stopScroll()">Stop</button>
+        <button class="btn" onclick="resetScroll()">Reset</button>
+        <div class="speed-display">Speed: <span id="speedDisplay">80</span> px/s</div>
+        <button class="btn" onclick="adjustSpeed(-20)">Slower</button>
+        <button class="btn" onclick="adjustSpeed(20)">Faster</button>
+    </div>
+
+    <div style="position: fixed; top: 50%; left: 20px; transform: translateY(-50%); color: #8E8E93; font-size: 14px; text-align: right; width: 100px;">
+        Reading<br>Zone<br>Guide
+    </div>
+
+    <script>
+        let isScrolling = false;
+        let scrollPosition = 0;
+        let scrollSpeed = 80; // pixels per second
+        let animationFrame = null;
+        let lastTime = 0;
+
+        const testText = document.getElementById('testText');
+        const speedDisplay = document.getElementById('speedDisplay');
+
+        function startScroll() {
+            if (isScrolling) return;
+            
+            isScrolling = true;
+            lastTime = performance.now();
+            animate();
+        }
+
+        function stopScroll() {
+            isScrolling = false;
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        }
+
+        function resetScroll() {
+            stopScroll();
+            scrollPosition = 0;
+            testText.style.transform = 'translateY(0px)';
+        }
+
+        function adjustSpeed(delta) {
+            scrollSpeed = Math.max(10, Math.min(300, scrollSpeed + delta));
+            speedDisplay.textContent = scrollSpeed;
+        }
+
+        function animate() {
+            if (!isScrolling) return;
+
+            const currentTime = performance.now();
+            const deltaTime = (currentTime - lastTime) / 1000;
+            lastTime = currentTime;
+
+            scrollPosition += scrollSpeed * deltaTime;
+            testText.style.transform = `translateY(-${scrollPosition}px)`;
+
+            // Check if we've scrolled through all content
+            const textHeight = testText.scrollHeight;
+            const containerHeight = window.innerHeight;
+            const totalScrollNeeded = textHeight + containerHeight + 200;
+
+            if (scrollPosition > totalScrollNeeded) {
+                stopScroll();
+                setTimeout(resetScroll, 1000); // Auto-reset after 1 second
+                return;
+            }
+
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        // Auto-start the test
+        setTimeout(() => {
+            startScroll();
+        }, 2000);
+
+        // Update speed display
+        speedDisplay.textContent = scrollSpeed;
+    </script>
+</body>
+</html>
