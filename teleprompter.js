@@ -274,30 +274,30 @@ class CinePrompter {
         this.isOverlayMode = enabled;
         
         if (enabled) {
-            // Enable overlay mode
+            // Enable overlay mode - Better solution for iPhone
             document.body.style.position = 'fixed';
             document.body.style.top = '0';
             document.body.style.left = '0';
             document.body.style.width = '100vw';
             document.body.style.height = '100vh';
-            document.body.style.zIndex = '9999';
+            document.body.style.zIndex = '2147483647'; // Higher z-index
             document.body.style.pointerEvents = 'auto';
             document.body.style.background = 'transparent';
             
-            // Hide action bar and show instructions
+            // Hide action bar and show enhanced instructions
             this.elements.actionBar.style.display = 'none';
             this.elements.overlayInstructions.classList.remove('hidden');
             
             // Make control deck smaller for overlay use
-            this.elements.controlDeck.style.transform = 'scale(0.8)';
-            this.elements.controlDeck.style.bottom = '20px';
+            this.elements.controlDeck.style.transform = 'scale(0.7)';
+            this.elements.controlDeck.style.bottom = '15px';
             
             this.hapticFeedback();
             
-            // Auto-hide instructions after 10 seconds
+            // Show instructions for 15 seconds
             setTimeout(() => {
                 this.elements.overlayInstructions.classList.add('hidden');
-            }, 10000);
+            }, 15000);
         } else {
             // Disable overlay mode
             document.body.style.position = '';

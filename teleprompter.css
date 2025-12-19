@@ -409,6 +409,32 @@ input:checked + .slider:before {
     visibility: hidden;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    /* iPhone Safari fixes */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* iPhone Safari specific modal positioning */
+@supports (-webkit-touch-callout: none) {
+    .modal-overlay {
+        display: -webkit-flex;
+        -webkit-align-items: center;
+        -webkit-justify-content: center;
+    }
+    
+    .modal-content {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+        max-width: calc(100vw - 40px);
+        max-height: calc(100vh - 40px);
+    }
+    
+    .modal-overlay.active .modal-content {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }
 
 .modal-overlay.active {
@@ -425,6 +451,12 @@ input:checked + .slider:before {
     overflow: hidden;
     transform: scale(0.9);
     transition: transform 0.3s ease;
+    /* iPhone Safari positioning fixes */
+    position: relative;
+    margin: 20px;
+    /* Ensure modal stays centered */
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 .modal-overlay.active .modal-content {
